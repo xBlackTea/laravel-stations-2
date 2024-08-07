@@ -2,8 +2,9 @@
 
 namespace Database\Seeders;
 
-use App\Practice;
 use Illuminate\Database\Seeder;
+use App\Practice;
+use App\Models\Movie;
 
 class DatabaseSeeder extends Seeder
 {
@@ -15,5 +16,6 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         Practice::factory(10)->create();
+        Movie::factory(10)->create();
     }
 }
