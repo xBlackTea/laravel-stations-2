@@ -18,6 +18,14 @@
             text-align: left;
         }
     </style>
+    <script>
+        function confirmDelete(event, id) {
+            event.preventDefault();
+            if (confirm('本当に削除しますか？')) {
+                document.getElementById('delete-form-' + id).submit();
+            }
+        }
+    </script>
 </head>
 <body>
     <h1>Admin Movies List</h1>
@@ -49,7 +57,14 @@
                     <td>{{ $movie->description }}</td>
                     <td>{{ $movie->created_at }}</td>
                     <td>{{ $movie->updated_at }}</td>
-                    <td><a href="/admin/movies/{{ $movie->id }}/edit">編集</a></td>
+                    <td>
+                        <a href="/admin/movies/{{ $movie->id }}/edit">編集</a>
+                        <form id="delete-form-{{ $movie->id }}" action="/admin/movies/{{ $movie->id }}/destroy" method="POST" style="display:inline;">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" onclick="confirmDelete(event, {{ $movie->id }})">削除</button>
+                        </form>
+                    </td>
                 </tr>
             @endforeach
         </tbody>
