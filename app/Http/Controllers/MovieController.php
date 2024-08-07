@@ -1,8 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Models\Movie;
 
+use App\Models\Movie;
 use Illuminate\Http\Request;
 
 class MovieController extends Controller
@@ -12,10 +12,34 @@ class MovieController extends Controller
         $movies = Movie::all();
         return view('getMovies', ['movies' => $movies]);
     }
-
     public function getAdminMovies()
     {
         $movies = Movie::all();
         return view('getAdminMovies', ['movies' => $movies]);
     }
+    public function create()
+    {
+        return view('createMovie');
+    }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            'title' => 'required|unique:movies,title',
+            'image_url' => 'required|url',
+            'published_year' => 'required|integer',
+            'description' => 'required',
+            'is_showing' => 'sometimes|boolean'
+        ]);
+    
+        Movie::create([
+            'title' => $request->input('title'),
+            'image_url' => $request->input('image_url'),
+            'published_year' => $request->input('published_year'),
+            'description' => $request->input('description'),
+            'is_showing' => $request->has('is_showing')
+        ]);
+    
+        return redirect('/admin/movies')->with('success', '映画作品が登録されました。');
+    }    
 }
