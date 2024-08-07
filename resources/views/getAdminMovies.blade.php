@@ -21,6 +21,9 @@
 </head>
 <body>
     <h1>Admin Movies List</h1>
+    @if(session('success'))
+        <p style="color: green;">{{ session('success') }}</p>
+    @endif
     <table>
         <thead>
             <tr>
@@ -32,6 +35,7 @@
                 <th>概要</th>
                 <th>登録日時</th>
                 <th>更新日時</th>
+                <th>操作</th>
             </tr>
         </thead>
         <tbody>
@@ -45,9 +49,11 @@
                     <td>{{ $movie->description }}</td>
                     <td>{{ $movie->created_at }}</td>
                     <td>{{ $movie->updated_at }}</td>
+                    <td><a href="/admin/movies/{{ $movie->id }}/edit">編集</a></td>
                 </tr>
             @endforeach
         </tbody>
     </table>
+    <a href="/admin/movies/create">映画を登録</a>
 </body>
 </html>

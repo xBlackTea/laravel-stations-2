@@ -42,5 +42,9 @@ Route::get('/getPractice', [PracticeController::class, 'getPractice']);
 Route::get('/movies', [MovieController::class, 'getMovies']);
 
 Route::get('/admin/movies', [MovieController::class, 'getAdminMovies']);
+
 Route::get('/admin/movies/create', [MovieController::class, 'create']);
 Route::post('/admin/movies/store', [MovieController::class, 'store']);
+
+Route::get('/admin/movies/{id}/edit', [MovieController::class, 'edit']);
+Route::patch('/admin/movies/{id}/update', [MovieController::class, 'update']);
