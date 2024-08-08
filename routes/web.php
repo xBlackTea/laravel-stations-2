@@ -40,17 +40,14 @@ Route::get('/practice2', [PracticeController::class, 'sample2']);
 Route::get('/practice3', [PracticeController::class, 'sample3']);
 Route::get('/getPractice', [PracticeController::class, 'getPractice']);
 
-Route::get('/movies', [MovieController::class, 'getMovies']);
-Route::get('/movies/{id}', [MovieController::class, 'show']);
-
 Route::get('/sheets', [SheetController::class, 'getSheets']);
 
-Route::get('/admin/movies', [MovieController::class, 'getAdminMovies']);
+Route::get('/movies', [MovieController::class, 'getMovies']);
+Route::get('/movies/{id}', [MovieController::class, 'getMovie']);
 
-Route::get('/admin/movies/create', [MovieController::class, 'create']);
-Route::post('/admin/movies/store', [MovieController::class, 'store']);
-
-Route::get('/admin/movies/{id}/edit', [MovieController::class, 'edit']);
-Route::patch('/admin/movies/{id}/update', [MovieController::class, 'update']);
-
-Route::delete('/admin/movies/{id}/destroy', [MovieController::class, 'destroy']);
+Route::get('/admin/movies', [MovieController::class, 'adminMovies']);
+Route::get('/admin/movies/create', [MovieController::class, 'adminCreateMovies']);
+Route::post('/admin/movies/store', [MovieController::class, 'adminStoreMovies']);
+Route::get('/admin/movies/{id}/edit', [MovieController::class, 'adminEditMovies']);
+Route::patch('/admin/movies/{id}/update', [MovieController::class, 'adminUpdateMovies']);
+Route::delete('/admin/movies/{id}/destroy', [MovieController::class, 'adminDestroyMovies']);

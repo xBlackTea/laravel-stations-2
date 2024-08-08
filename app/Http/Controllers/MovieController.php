@@ -35,18 +35,28 @@ class MovieController extends Controller
         return view('getMovies', ['movies' => $movies]);
     }
 
-    public function getAdminMovies()
+    public function getMovie($id)
+    {
+        $movie = Movie::findOrFail($id);
+        $schedules = \DB::table('schedules')->where('movie_id', $id)->orderBy('start_time')->get();
+
+        return view('getMovie', compact('movie', 'schedules'));
+    }
+
+
+
+    public function adminMovies()
     {
         $movies = Movie::all();
-        return view('getAdminMovies', ['movies' => $movies]);
+        return view('adminMovies', ['movies' => $movies]);
     }
 
-    public function create()
+    public function adminCreateMovies()
     {
-        return view('createMovie');
+        return view('adminCreateMovies');
     }
 
-    public function store(Request $request)
+    public function adminStoreMovies(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'title' => 'required|unique:movies',
@@ -92,13 +102,13 @@ class MovieController extends Controller
     }
     
 
-    public function edit($id)
+    public function adminEditMovies($id)
     {
         $movie = Movie::findOrFail($id);
-        return view('editMovie', ['movie' => $movie]);
+        return view('adminEditMovies', ['movie' => $movie]);
     }
 
-    public function update(Request $request, $id)
+    public function adminUpdateMovies(Request $request, $id)
     {
         $movie = Movie::findOrFail($id);
     
@@ -147,19 +157,11 @@ class MovieController extends Controller
         }
     }
 
-    public function destroy($id)
+    public function adminDestroyMovies($id)
     {
         $movie = Movie::findOrFail($id);
         $movie->delete();
 
         return redirect('/admin/movies')->with('success', '映画作品が削除されました。');
-    }
-
-    public function show($id)
-    {
-        $movie = Movie::findOrFail($id);
-        $schedules = \DB::table('schedules')->where('movie_id', $id)->orderBy('start_time')->get();
-
-        return view('getMovie', compact('movie', 'schedules'));
     }
 }
