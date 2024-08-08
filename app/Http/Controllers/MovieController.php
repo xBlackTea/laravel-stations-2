@@ -154,4 +154,12 @@ class MovieController extends Controller
 
         return redirect('/admin/movies')->with('success', '映画作品が削除されました。');
     }
+
+    public function show($id)
+    {
+        $movie = Movie::findOrFail($id);
+        $schedules = \DB::table('schedules')->where('movie_id', $id)->orderBy('start_time')->get();
+
+        return view('getMovie', compact('movie', 'schedules'));
+    }
 }

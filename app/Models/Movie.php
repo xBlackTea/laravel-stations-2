@@ -1,7 +1,5 @@
 <?php
 
-// app/Models/Movie.php
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -18,5 +16,10 @@ class Movie extends Model
     public function genre()
     {
         return $this->belongsTo(Genre::class);
+    }
+
+    public function schedules()
+    {
+        return $this->hasMany(Schedule::class);
     }
 }
