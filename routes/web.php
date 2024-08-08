@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\PracticeController;
 use App\Http\Controllers\MovieController;
+use App\Http\Controllers\SheetController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -40,6 +41,7 @@ Route::get('/practice3', [PracticeController::class, 'sample3']);
 Route::get('/getPractice', [PracticeController::class, 'getPractice']);
 
 Route::get('/movies', [MovieController::class, 'getMovies']);
+Route::get('/sheets', [SheetController::class, 'getSheets']);
 
 Route::get('/admin/movies', [MovieController::class, 'getAdminMovies']);
 

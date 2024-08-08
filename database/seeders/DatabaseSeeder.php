@@ -14,6 +14,7 @@ class DatabaseSeeder extends Seeder
         Practice::factory(10)->create();
         $this->call(GenresTableSeeder::class);
         $this->call(MoviesTableSeeder::class);
+        $this->call(SheetTableSeeder::class); // 追加
     }
 }
 
