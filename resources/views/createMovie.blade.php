@@ -39,6 +39,10 @@
             <label for="is_showing">上映中かどうか</label>
             <input type="checkbox" id="is_showing" name="is_showing" value="1" {{ old('is_showing') ? 'checked' : '' }}>
         </div>
+        <div>
+            <label for="genre">ジャンル</label>
+            <input type="text" id="genre" name="genre" value="{{ old('genre') }}">
+        </div>
         <button type="submit">登録</button>
     </form>
 </body>

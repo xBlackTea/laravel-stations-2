@@ -16,7 +16,7 @@ class AddUniqueToTitleInMoviesTable extends Migration
         Schema::table('movies', function (Blueprint $table) {
             // キーの長さを指定してユニーク制約を追加
             $table->text('title')->change();
-            DB::statement('ALTER TABLE movies ADD UNIQUE movies_title_unique (title(255))');
+            DB::statement('ALTER TABLE movies ADD UNIQUE movies_title_unique (title(511))');
         });
     }
 
