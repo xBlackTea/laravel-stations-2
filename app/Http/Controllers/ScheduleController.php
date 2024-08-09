@@ -34,35 +34,56 @@ class ScheduleController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'movie_id' => 'required|exists:movies,id',
-            'start_time_date' => 'required|date_format:Y-m-d',
+            'start_time_date' => 'required|date_format:Y-m-d|before_or_equal:end_time_date',
             'start_time_time' => 'required|date_format:H:i',
-            'end_time_date' => 'required|date_format:Y-m-d',
+            'end_time_date' => 'required|date_format:Y-m-d|after_or_equal:start_time_date',
             'end_time_time' => 'required|date_format:H:i',
         ]);
-
+    
         if ($validator->fails()) {
             return redirect('/admin/movies/' . $movieId . '/schedules/create')
                 ->withErrors($validator)
                 ->withInput();
         }
+    
+        $startDateTime = CarbonImmutable::createFromFormat('Y-m-d H:i', $request->input('start_time_date') . ' ' . $request->input('start_time_time'));
+        $endDateTime = CarbonImmutable::createFromFormat('Y-m-d H:i', $request->input('end_time_date') . ' ' . $request->input('end_time_time'));
+    
+        if ($startDateTime->greaterThan($endDateTime)) {
+            return redirect('/admin/movies/' . $movieId . '/schedules/create')
+                ->withErrors([
+                    'start_time_time' => '開始時刻は終了時刻より前でなければなりません。',
+                    'end_time_time' => '終了時刻は開始時刻より後でなければなりません。',
+                ])
+                ->withInput();
+        }
+    
+        if ($startDateTime->eq($endDateTime)) {
+            return redirect('/admin/movies/' . $movieId . '/schedules/create')
+                ->withErrors([
+                    'start_time_time' => '開始時刻と終了時刻は同一であってはなりません。',
+                    'end_time_time' => '開始時刻と終了時刻は同一であってはなりません。',
+                ])
+                ->withInput();
+        }
 
-        $startDate = '2022-01-01';
-        $endDate = '2022-01-01';
-
-        $startTimeString = $startDate . ' ' . $request->input('start_time_time') . ':00';
-        $endTimeString = $endDate . ' ' . $request->input('end_time_time') . ':00';
-
-        $startTime = CarbonImmutable::createFromFormat('Y-m-d H:i:s', $startTimeString, 'Asia/Tokyo');
-        $endTime = CarbonImmutable::createFromFormat('Y-m-d H:i:s', $endTimeString, 'Asia/Tokyo');
-
+        if ($startDateTime->diffInMinutes($endDateTime) < 6) {
+            return redirect('/admin/movies/' . $movieId . '/schedules/create')
+                ->withErrors([
+                    'start_time_time' => '開始時刻と終了時刻の差は5分以上でなければなりません。',
+                    'end_time_time' => '開始時刻と終了時刻の差は5分以上でなければなりません。',
+                ])
+                ->withInput();
+        }
+    
         Schedule::create([
             'movie_id' => $movieId,
-            'start_time' => $startTime,
-            'end_time' => $endTime,
+            'start_time' => $startDateTime,
+            'end_time' => $endDateTime,
         ]);
-
+    
         return redirect('/admin/schedules')->with('success', 'スケジュールが作成されました。');
-    }
+    }       
 
     public function editSchedule($id)
     {
@@ -84,16 +105,12 @@ class ScheduleController extends Controller
             return redirect()->back()->withErrors($validator)->withInput();
         }
     
-        // 年月日を固定し、時間部分はリクエストから受け取る
-        $startDate = '2022-01-01';
-        $endDate = '2022-01-01';
-    
-        $startTimeString = $startDate . ' ' . $request->input('start_time_time') . ':00';
-        $endTimeString = $endDate . ' ' . $request->input('end_time_time') . ':00';
-    
+        $startTimeString = $request->input('start_time_date') . ' ' . $request->input('start_time_time') . ':00';
+        $endTimeString = $request->input('end_time_date') . ' ' . $request->input('end_time_time') . ':00';
+
         $startTime = CarbonImmutable::createFromFormat('Y-m-d H:i:s', $startTimeString, 'Asia/Tokyo');
         $endTime = CarbonImmutable::createFromFormat('Y-m-d H:i:s', $endTimeString, 'Asia/Tokyo');
-    
+
         $schedule = Schedule::findOrFail($id);
         $schedule->movie_id = $request->input('movie_id');
         $schedule->start_time = $startTime;
