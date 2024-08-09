@@ -48,12 +48,18 @@ class MovieController extends Controller
     public function adminMovies()
     {
         $movies = Movie::all();
-        return view('adminMovies', ['movies' => $movies]);
+        return view('admin.movies.adminMovies', ['movies' => $movies]);
+    }
+
+    public function adminShowMovie($id)
+    {
+        $movie = Movie::with('schedules')->findOrFail($id);
+        return view('admin.movies.adminShowMovie', compact('movie'));
     }
 
     public function adminCreateMovies()
     {
-        return view('adminCreateMovies');
+        return view('admin.movies.adminCreateMovies');
     }
 
     public function adminStoreMovies(Request $request)
@@ -105,7 +111,7 @@ class MovieController extends Controller
     public function adminEditMovies($id)
     {
         $movie = Movie::findOrFail($id);
-        return view('adminEditMovies', ['movie' => $movie]);
+        return view('admin.movies.adminEditMovies', ['movie' => $movie]);
     }
 
     public function adminUpdateMovies(Request $request, $id)

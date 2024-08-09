@@ -15,25 +15,12 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\PracticeController;
 use App\Http\Controllers\MovieController;
+use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\SheetController;
 
 Route::get('/', function () {
     return view('welcome');
 });
-
-// Route::get('practice', function() {
-//     return response('practice');
-// });
-
-// Route::get('practice2', function() {
-//     $test = 'practice2';
-// return response($test);
-// });
-
-// Route::get('practice3', function() {
-//     $test = 'test';
-// return response($test);
-// });
 
 Route::get('/practice', [PracticeController::class, 'sample']);
 Route::get('/practice2', [PracticeController::class, 'sample2']);
@@ -47,7 +34,16 @@ Route::get('/movies/{id}', [MovieController::class, 'getMovie']);
 
 Route::get('/admin/movies', [MovieController::class, 'adminMovies']);
 Route::get('/admin/movies/create', [MovieController::class, 'adminCreateMovies']);
+Route::get('/admin/movies/{id}', [MovieController::class, 'adminShowMovie']);
 Route::post('/admin/movies/store', [MovieController::class, 'adminStoreMovies']);
 Route::get('/admin/movies/{id}/edit', [MovieController::class, 'adminEditMovies']);
 Route::patch('/admin/movies/{id}/update', [MovieController::class, 'adminUpdateMovies']);
 Route::delete('/admin/movies/{id}/destroy', [MovieController::class, 'adminDestroyMovies']);
+
+Route::get('/admin/schedules', [ScheduleController::class, 'scheduleList']);
+Route::get('/admin/schedules/{id}', [ScheduleController::class, 'showSchedule']);
+Route::get('/admin/movies/{id}/schedules/create', [ScheduleController::class, 'createSchedule']);
+Route::post('/admin/movies/{id}/schedules/store', [ScheduleController::class, 'storeSchedule']);
+Route::get('/admin/schedules/{id}/edit', [ScheduleController::class, 'editSchedule']);
+Route::patch('/admin/schedules/{id}/update', [ScheduleController::class, 'updateSchedule']);
+Route::delete('/admin/schedules/{id}/destroy', [ScheduleController::class, 'destroySchedule']);
